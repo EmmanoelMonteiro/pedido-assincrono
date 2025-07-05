@@ -1,6 +1,6 @@
 # Sistema de Processamento de Pedidos Assíncrono
 
-Este projeto demonstra uma arquitetura de microserviços em Java utilizando Spring Boot e RabbitMQ para processamento assíncrono de pedidos. Ele é ideal para quem busca entender a integração entre serviços desacoplados por meio de filas de mensagens.
+Este projeto demonstra uma arquitetura de microserviços em Java utilizando Spring Boot e RabbitMQ para processamento assíncrono de pedidos. Ele é ideal para quem busca entender a integração entre serviços desacoplados por meio de filas de mensagens, com uma estrutura que segue os princípios da Arquitetura Limpa (Clean Architecture).
 
 ---
 
@@ -11,6 +11,7 @@ Este projeto demonstra uma arquitetura de microserviços em Java utilizando Spri
 * **Serialização/Desserialização JSON**: Utiliza as bibliotecas **Jackson** e **Lombok** para converter objetos Java em JSON para envio via RabbitMQ e vice-versa, essencial para a comunicação entre os serviços.
 * **Resolução de Ciclos de Dependência no Spring**: Aborda a identificação e correção de ciclos de dependência entre *beans* Spring, um problema comum em aplicações complexas, garantindo a inicialização correta do contexto da aplicação.
 * **Ajustes do Lombok**: Detalha a importância e o uso correto das anotações do Lombok (`@Getter`, `@Setter`, `@Builder`, `@NoArgsConstructor`, `@AllArgsConstructor`) para gerar automaticamente código boilerplate, crucial para a serialização e desserialização de objetos pelo Jackson.
+* **Padrão de Arquitetura Limpa (Clean Architecture)**: A estrutura de diretórios e a organização do código nos microserviços refletem os princípios da Arquitetura Limpa, separando as preocupações em camadas (Domínio, Aplicação, Infraestrutura) para promover código testável, manutenível e independente de frameworks externos.
 
 ---
 
@@ -45,7 +46,8 @@ O projeto foi desenvolvido para se integrar com o RabbitMQ 3.13.7 rodando localm
 
 ---
 
-## Estrutura do Projeto
+## 📁 Estrutura do Projeto
+```shell
 
 pedido-assincrono/
 ├── pom.xml
@@ -57,7 +59,7 @@ pedido-assincrono/
 ├── src/main/java/com/exemplo/processador/
 │   ├── ... (código do microserviço processador)
 └── src/main/resources/application.properties
-
+```
 ---
 
 ## Como Executar o Projeto
@@ -115,3 +117,10 @@ curl -X POST http://localhost:8080/api/pedidos \
     "clienteId": "cliente-teste-123",
     "valorTotal": 99.99
 }'
+```
+
+## Resultados Esperados:
+
+* No terminal do `microservice-pedidos`, você verá uma mensagem indicando que o pedido foi recebido e enviado para a fila do RabbitMQ.
+
+* No terminal do `microservice-processador-pedidos`, você observará a mensagem sendo recebida, o processamento simulado (com um atraso de 5 segundos), e a conclusão do processo.
