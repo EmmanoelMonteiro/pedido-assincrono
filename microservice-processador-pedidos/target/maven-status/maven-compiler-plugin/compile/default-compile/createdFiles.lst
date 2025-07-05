@@ -1,0 +1,8 @@
+com\exemplo\processador\domain\model\Pedido$PedidoBuilder.class
+com\exemplo\processador\application\service\ProcessadorApplicationService.class
+com\exemplo\processador\config\ObjectMapperConfig.class
+com\exemplo\processador\infrastructure\rabbitmq\PedidoMessageConsumer.class
+com\exemplo\processador\domain\service\ProcessamentoPedidoService.class
+com\exemplo\processador\ProcessadorPedidosApplication.class
+com\exemplo\processador\domain\model\Pedido.class
+com\exemplo\processador\domain\service\impl\ProcessamentoPedidoServiceImpl.class

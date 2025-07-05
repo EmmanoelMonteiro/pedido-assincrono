@@ -1,0 +1,10 @@
+C:\Users\User\Documents\java\pedido-assincrono\microservice-pedidos\src\main\java\com\exemplo\pedidos\application\dto\CriarPedidoDTO.java
+C:\Users\User\Documents\java\pedido-assincrono\microservice-pedidos\src\main\java\com\exemplo\pedidos\application\service\PedidoApplicationService.java
+C:\Users\User\Documents\java\pedido-assincrono\microservice-pedidos\src\main\java\com\exemplo\pedidos\config\ObjectMapperConfig.java
+C:\Users\User\Documents\java\pedido-assincrono\microservice-pedidos\src\main\java\com\exemplo\pedidos\config\RabbitMQConfig.java
+C:\Users\User\Documents\java\pedido-assincrono\microservice-pedidos\src\main\java\com\exemplo\pedidos\domain\model\Pedido.java
+C:\Users\User\Documents\java\pedido-assincrono\microservice-pedidos\src\main\java\com\exemplo\pedidos\domain\service\impl\PedidoDomainServiceImpl.java
+C:\Users\User\Documents\java\pedido-assincrono\microservice-pedidos\src\main\java\com\exemplo\pedidos\domain\service\PedidoDomainService.java
+C:\Users\User\Documents\java\pedido-assincrono\microservice-pedidos\src\main\java\com\exemplo\pedidos\infrastructure\controller\PedidoController.java
+C:\Users\User\Documents\java\pedido-assincrono\microservice-pedidos\src\main\java\com\exemplo\pedidos\infrastructure\rabbitmq\PedidoMessageSender.java
+C:\Users\User\Documents\java\pedido-assincrono\microservice-pedidos\src\main\java\com\exemplo\pedidos\PedidosApplication.java

@@ -1,0 +1,11 @@
+com\exemplo\pedidos\domain\model\Pedido$PedidoBuilder.class
+com\exemplo\pedidos\config\ObjectMapperConfig.class
+com\exemplo\pedidos\domain\service\PedidoDomainService.class
+com\exemplo\pedidos\domain\service\impl\PedidoDomainServiceImpl.class
+com\exemplo\pedidos\PedidosApplication.class
+com\exemplo\pedidos\application\dto\CriarPedidoDTO.class
+com\exemplo\pedidos\infrastructure\rabbitmq\PedidoMessageSender.class
+com\exemplo\pedidos\config\RabbitMQConfig.class
+com\exemplo\pedidos\application\service\PedidoApplicationService.class
+com\exemplo\pedidos\domain\model\Pedido.class
+com\exemplo\pedidos\infrastructure\controller\PedidoController.class
