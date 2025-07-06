@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 @ToString
-@NoArgsConstructor // Adicione esta anotação
-@AllArgsConstructor // Adicione esta anotação para que @Builder funcione corretamente
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pedido {
     private String id;
     private String clienteId;
