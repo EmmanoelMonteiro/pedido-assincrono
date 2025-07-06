@@ -9,8 +9,6 @@ Este projeto demonstra uma arquitetura de microserviços em Java utilizando Spri
 * **Configuração Maven Multi-Módulo**: O projeto é estruturado como um projeto pai Maven com dois submódulos, facilitando a gestão de dependências e a compilação de múltiplos microserviços em um único repositório.
 * **Integração RabbitMQ**: Mostra como implementar o envio de mensagens (publicação) de pedidos em uma fila e o consumo dessas mensagens por um serviço processador, garantindo um fluxo de trabalho assíncrono e resiliente.
 * **Serialização/Desserialização JSON**: Utiliza as bibliotecas **Jackson** e **Lombok** para converter objetos Java em JSON para envio via RabbitMQ e vice-versa, essencial para a comunicação entre os serviços.
-* **Resolução de Ciclos de Dependência no Spring**: Aborda a identificação e correção de ciclos de dependência entre *beans* Spring, um problema comum em aplicações complexas, garantindo a inicialização correta do contexto da aplicação.
-* **Ajustes do Lombok**: Detalha a importância e o uso correto das anotações do Lombok (`@Getter`, `@Setter`, `@Builder`, `@NoArgsConstructor`, `@AllArgsConstructor`) para gerar automaticamente código boilerplate, crucial para a serialização e desserialização de objetos pelo Jackson.
 * **Padrão de Arquitetura Limpa (Clean Architecture)**: A estrutura de diretórios e a organização do código nos microserviços refletem os princípios da Arquitetura Limpa, separando as preocupações em camadas (Domínio, Aplicação, Infraestrutura) para promover código testável, manutenível e independente de frameworks externos.
 
 ---
