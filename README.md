@@ -67,8 +67,8 @@ Siga estes passos para baixar, compilar e executar os microserviços:
 1.  **Clone o Repositório:**
 
     ```bash
-    git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
-    cd seu-repositorio
+    git clone https://github.com/EmmanoelMonteiro/pedido-assincrono.git
+    cd pedido-assincrono
     ```
 
     *(Lembre-se de substituir `seu-usuario/seu-repositorio.git` pelo caminho real do seu projeto no GitHub)*
