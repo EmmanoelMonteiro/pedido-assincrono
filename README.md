@@ -62,20 +62,24 @@ Esta opção utiliza um pipeline de deploy para construir e executar os microser
 
 1.  **Crie a Rede Docker:**
     Para que os containers de aplicação e de mensagens se comuniquem, eles devem estar na mesma rede Docker. Crie uma rede personalizada:
-    ```bash
+=======
+2.  **Compile o Projeto Pai:**
+    No diretório raiz do projeto (`pedido-assincrono/`), execute o seguinte comando Maven para compilar todos os módulos e instalar as dependências:
+
+   ```bash
     docker network create projeto-pedidos-net
     ```
 
-2.  **Inicie o RabbitMQ na Nova Rede:**
+3.  **Inicie o RabbitMQ na Nova Rede:**
     Execute o comando para iniciar o RabbitMQ. **É crucial que ele seja criado na mesma rede `projeto-pedidos-net`** para permitir a comunicação com os microserviços. A imagem a ser utilizada é `rabbitmq:3.13.7-management` e o nome do container deve ser `rabbitmq-server`.
     ```bash
     docker run -d --network projeto-pedidos-net --hostname my-rabbit --name rabbitmq-server -p 5672:5672 -p 15672:15672 rabbitmq:3.13.7-management
     ```
 
-3.  **Acesse o Terminal do WSL ou Git Bash:**
+4.  **Acesse o Terminal do WSL ou Git Bash:**
     Abra um terminal com ambiente `bash` e navegue até a raiz do projeto.
 
-4.  **Execute o Script de Deploy:**
+5.  **Execute o Script de Deploy:**
     O script `deploy-pipeline.sh` automatiza a compilação, cópia dos JARs e a execução dos microserviços dentro de um container Docker.
 
     ```bash
