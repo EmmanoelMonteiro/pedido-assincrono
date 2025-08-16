@@ -97,3 +97,18 @@ Use uma ferramenta como `curl` (terminal) ou Postman/Insomnia para enviar uma re
 curl -X POST http://localhost:8080/api/pedidos \
 -H "Content-Type: application/json" \
 -d '{ "clienteId": "cliente-teste-123", "valorTotal": 99.99 }'
+```
+
+**Para a Execução Automatizada (via Docker/Nginx):**
+Se a sua pipeline estiver configurada para usar o Nginx na porta 80, a URL de teste será:
+
+```bash
+curl -X POST http://localhost/api/pedidos \
+-H "Content-Type: application/json" \
+-d '{ "clienteId": "cliente-teste-123", "valorTotal": 99.99 }'
+```
+
+**Resultados Esperados:**
+
+* No terminal do microserviço de pedidos (ou nos logs do container), você verá uma mensagem indicando que o pedido foi recebido e enviado para a fila do RabbitMQ.
+* No terminal do microserviço processador, você observará a mensagem sendo recebida, o processamento simulado (com um atraso de 5 segundos), e a conclusão do processo.
