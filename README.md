@@ -71,8 +71,6 @@ Siga estes passos para baixar, compilar e executar os microserviços:
     cd pedido-assincrono
     ```
 
-    *(Lembre-se de substituir `seu-usuario/seu-repositorio.git` pelo caminho real do seu projeto no GitHub)*
-
 2.  **Compile o Projeto Pai:**
     No diretório raiz do projeto (`pedido-assincrono/`), execute o seguinte comando Maven para compilar todos os módulos e instalar as dependências:
 
