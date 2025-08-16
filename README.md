@@ -40,7 +40,7 @@ Esta opção é ideal para desenvolvimento e testes rápidos.
     ```bash
     git clone [https://github.com/EmmanoelMonteiro/pedido-assincrono.git](https://github.com/EmmanoelMonteiro/pedido-assincrono.git)
     cd pedido-assincrono
-    mvn clean install
+    mvn clean install 
     ```
 
 3.  **Execute os Microserviços:**
