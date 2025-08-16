@@ -1,92 +1,164 @@
-# Sistema de Processamento de Pedidos Assíncrono
+# Pedido Assíncrono
 
-Este projeto demonstra uma arquitetura de microserviços em Java utilizando Spring Boot e RabbitMQ para processamento assíncrono de pedidos. Ele é ideal para quem busca entender a integração entre serviços desacoplados por meio de filas de mensagens, com uma estrutura que segue os princípios da Arquitetura Limpa (Clean Architecture).
+Este projeto demonstra uma arquitetura de **microserviços em Java** utilizando **Spring Boot** e **RabbitMQ** para processamento assíncrono de pedidos.  
+A proposta é mostrar a comunicação entre serviços desacoplados por meio de **filas de mensagens**, aplicando conceitos de **Clean Architecture**.
 
-### Destaques do Projeto
-
-* **Configuração Maven Multi-Módulo**: O projeto é estruturado como um projeto pai Maven com dois submódulos, facilitando a gestão de dependências e a compilação de múltiplos microserviços em um único repositório.
-* **Integração RabbitMQ**: Mostra como implementar o envio de mensagens (publicação) de pedidos em uma fila e o consumo dessas mensagens por um serviço processador, garantindo um fluxo de trabalho assíncrono e resiliente.
-* **Serialização/Desserialização JSON**: Utiliza as bibliotecas `Jackson` e `Lombok` para converter objetos Java em JSON para envio via RabbitMQ e vice-versa, essencial para a comunicação entre os serviços. A linha `mapper.registerModule(new JavaTimeModule());` é utilizada para habilitar o Jackson a serializar classes de data e hora do Java 8+.
-* **Padrão de Arquitetura Limpa (Clean Architecture)**: A estrutura de diretórios e a organização do código nos microserviços refletem os princípios da Arquitetura Limpa, separando as preocupações em camadas (Domínio, Aplicação, Infraestrutura) para promover código testável, manutenível e independente de frameworks externos.
-
-### Pré-requisitos
-
-Antes de executar o projeto, certifique-se de ter instalado em sua máquina:
-* **Java Development Kit (JDK) 21 LTS**
-* **Apache Maven**
-* **Docker Desktop**: Necessário para rodar os containers de RabbitMQ e da aplicação.
-* **WSL (Windows Subsystem for Linux)** ou **Git Bash**: Para executar o script de deploy automatizado.
+Além disso, o projeto aborda a **automação do processo de entrega contínua (CD)** utilizando um **Dockerfile**, que empacota toda a aplicação em containers padronizados, simplificando a implantação e garantindo consistência entre diferentes ambientes (desenvolvimento, homologação e produção).
 
 ---
 
-## 🚀 Como Executar o Projeto
+## 🏗 Arquitetura
 
-Você tem duas opções para executar o projeto: **manualmente** (para desenvolvimento) ou de forma **automatizada** (para simular um ambiente de CD).
+- **RabbitMQ**: responsável pela fila de mensagens para comunicação assíncrona.
+- **Microservice Pedidos**: envia os pedidos para a fila.
+- **Microservice Processador de Pedidos**: consome e processa os pedidos recebidos.
+- **Nginx**: atua como proxy reverso para orquestrar o tráfego.
+- **Docker**: utilizado para empacotar e executar toda a aplicação de forma isolada.
 
-### Opção 1: Execução Manual (Local)
+---
 
-Esta opção é ideal para desenvolvimento e testes rápidos.
+## 📂 Estrutura do Projeto
 
-1.  **Configure o RabbitMQ com Docker Desktop:**
-    Inicie o container do RabbitMQ na sua máquina, que será acessível pelo seu projeto local.
+```
+pedido-assincrono/
+│── docker/
+│   ├── Dockerfile             # Imagem contendo Nginx, serviços e configuração
+│   ├── nginx_custom.conf      # Configuração personalizada do Nginx
+│
+│── microservice-pedidos/      # Serviço de envio de pedidos
+│   ├── src/...
+│   ├── pom.xml
+│
+│── microservice-processador-pedidos/ # Serviço de processamento de pedidos
+│   ├── src/...
+│   ├── pom.xml
+│
+│── README.md
+```
 
-    ```bash
-    docker run -d --hostname my-rabbit --name rabbitmq-server -p 5672:5672 -p 15672:15672 rabbitmq:3.13.7-management
-    ```
+---
 
-    Verifique se o RabbitMQ está rodando acessando `http://localhost:15672/`.
+## ⚙️ Pré-requisitos
 
-2.  **Clone e Compile o Repositório:**
-    ```bash
-    git clone [https://github.com/EmmanoelMonteiro/pedido-assincrono.git](https://github.com/EmmanoelMonteiro/pedido-assincrono.git)
-    cd pedido-assincrono
-    mvn clean install 
-    ```
+- [Java 17+](https://adoptium.net/)
+- [Maven 3.9+](https://maven.apache.org/)
+- [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/)
+- Git instalado
 
-3.  **Execute os Microserviços:**
-    * **Microserviço de Pedidos:**
-        ```bash
-        cd microservice-pedidos
-        mvn spring-boot:run
-        ```
-    * **Microserviço Processador de Pedidos:**
-      Abra um **novo terminal**, navegue até a pasta `microservice-processador-pedidos` e inicie-o:
-        ```bash
-        cd ../microservice-processador-pedidos
-        mvn spring-boot:run
-        ```
+---
+## 🛠 Tecnologias Utilizadas
 
-### Opção 2: Execução Automatizada com Docker (CD)
+- **Java 17**
+- **Spring Boot**
+- **RabbitMQ**
+- **Docker**
+- **Nginx**
+- **Maven**
 
-Esta opção utiliza um pipeline de deploy para construir e executar os microserviços em um ambiente isolado de containers.
+---
 
-1.  **Crie a Rede Docker:**
-    Para que os containers de aplicação e de mensagens se comuniquem, eles devem estar na mesma rede Docker. Crie uma rede personalizada:
-=======
-2.  **Compile o Projeto Pai:**
-    No diretório raiz do projeto (`pedido-assincrono/`), execute o seguinte comando Maven para compilar todos os módulos e instalar as dependências:
+## 📘 Como funciona
 
-   ```bash
-    docker network create projeto-pedidos-net
-    ```
+1. O serviço **Pedidos** envia mensagens para a fila do RabbitMQ.
+2. O serviço **Processador** consome essas mensagens e executa o processamento.
+3. O **Nginx** faz o balanceamento/reverso para gerenciar requisições externas.
 
-3.  **Inicie o RabbitMQ na Nova Rede:**
-    Execute o comando para iniciar o RabbitMQ. **É crucial que ele seja criado na mesma rede `projeto-pedidos-net`** para permitir a comunicação com os microserviços. A imagem a ser utilizada é `rabbitmq:3.13.7-management` e o nome do container deve ser `rabbitmq-server`.
-    ```bash
-    docker run -d --network projeto-pedidos-net --hostname my-rabbit --name rabbitmq-server -p 5672:5672 -p 15672:15672 rabbitmq:3.13.7-management
-    ```
+---
+## 🚀 Execução do Projeto
 
-4.  **Acesse o Terminal do WSL ou Git Bash:**
-    Abra um terminal com ambiente `bash` e navegue até a raiz do projeto.
+### 1. Clonar o repositório
 
-5.  **Execute o Script de Deploy:**
-    O script `deploy-pipeline.sh` automatiza a compilação, cópia dos JARs e a execução dos microserviços dentro de um container Docker.
+```bash
+git clone https://github.com/EmmanoelMonteiro/pedido-assincrono.git
+cd pedido-assincrono
+```
 
-    ```bash
-    chmod +x deploy-pipeline.sh
-    ./deploy-pipeline.sh
-    ```
-    O script irá criar um container de aplicação e um container Nginx para gerenciar o acesso aos serviços.
+---
+
+### 2. Construir os microserviços (gera os `.jar`)
+
+No diretório raiz do projeto (`pedido-assincrono/`), execute:
+
+```bash
+mvn clean package -DskipTests
+```
+
+Esse comando irá compilar e empacotar todos os subprojetos definidos no pom.xml principal, gerando os arquivos .jar dentro de:
+
+* microservice-pedidos/target/pedidos.jar
+* microservice-processador-pedidos/target/processador.jar
+
+Esses artefatos são utilizados pelo **Dockerfile** para construir a imagem da aplicação, garantindo a automação do processo de **Continuous Delivery (CD)**.
+Assim, a cada nova versão gerada, é possível empacotar automaticamente os serviços em containers padronizados, prontos para implantação em qualquer ambiente.
+
+### 3. Criar a rede Docker
+
+```bash
+docker network create projeto-pedidos-net
+```
+
+---
+
+### 4. Subir o container do RabbitMQ
+
+```bash
+docker run -d --hostname rabbitmq-host --name rabbitmq-server --network projeto-pedidos-net -p 5672:5672 -p 15672:15672 rabbitmq:3.13.7-management
+```
+* `-d`: Roda o contêiner em modo detached.
+* `--network projeto-pedidos-net`: Conecta o contêiner à rede criada.
+* `--name rabbitmq-server`: Define o nome do contêiner.
+* `-p 5672:5672`: Mapeia a porta padrão do RabbitMQ para a máquina hospedeira.
+* `-p 15672:15672`: Mapeia a porta da interface de gerenciamento do RabbitMQ.
+
+Acesse o painel em: [http://localhost:15672](http://localhost:15672)  
+
+Login padrão: **guest / guest**
+
+---
+
+### 5. Construir e rodar a imagem da aplicação
+
+```bash
+docker build -t app-pedidos-image ./docker
+```
+
+```bash
+docker run -d   --name app-pedidos   --network projeto-pedidos-net   -p 80:80 -p 8080:8080 -p 8081:8081   app-pedidos-image
+```
+
+---
+
+## 🔄 Execução Manual (sem Docker)
+
+### Subir o RabbitMQ
+
+```bash
+docker run -d  --hostname rabbitmq-host --name rabbitmq-server --network projeto-pedidos-net -p 5672:5672 -p 15672:15672 rabbitmq:3.13.7-management
+```
+* `-d`: Roda o contêiner em modo detached.
+* `--network projeto-pedidos-net`: Conecta o contêiner à rede criada.
+* `--name rabbitmq-server`: Define o nome do contêiner.
+* `-p 5672:5672`: Mapeia a porta padrão do RabbitMQ para a máquina hospedeira.
+* `-p 15672:15672`: Mapeia a porta da interface de gerenciamento do RabbitMQ.
+* 
+### Rodar os microserviços via Maven
+
+```bash
+cd microservice-pedidos
+mvn spring-boot:run
+```
+
+```bash
+cd ../microservice-processador-pedidos
+mvn spring-boot:run
+```
+---
+
+## 📡 Endpoints
+
+- **Microservice Pedidos**: [http://localhost:8080](http://localhost:8080)
+- **Microservice Processador**: [http://localhost:8081](http://localhost:8081)
+- **RabbitMQ Management**: [http://localhost:15672](http://localhost:15672)
 
 ---
 
@@ -103,16 +175,38 @@ curl -X POST http://localhost:8080/api/pedidos \
 -d '{ "clienteId": "cliente-teste-123", "valorTotal": 99.99 }'
 ```
 
-**Para a Execução Automatizada (via Docker/Nginx):**
-Se a sua pipeline estiver configurada para usar o Nginx na porta 80, a URL de teste será:
+---
+
+## ⚡ Automatização com Dockerfile (CD)
+
+Este projeto já possui um **Dockerfile** preparado para automatizar a entrega contínua (**Continuous Delivery - CD**).  
+Ele garante que todo o ambiente da aplicação seja empacotado em uma única imagem, incluindo:
+
+- Instalação do **Java 17**
+- Configuração do **Nginx** como proxy reverso
+- Inclusão dos microserviços (`pedidos.jar` e `processador.jar`)
+- Script de inicialização para rodar **os serviços + Nginx**
+
+Isso permite que qualquer desenvolvedor ou servidor de integração contínua (**CI/CD pipelines**) possa **gerar a imagem e rodar a aplicação sem precisar de configurações adicionais no ambiente**.
+
+### 📦 Construir a imagem
+
+Dentro da pasta raiz do projeto `pedido-assincrono/`, execute:
 
 ```bash
-curl -X POST http://localhost/api/pedidos \
--H "Content-Type: application/json" \
--d '{ "clienteId": "cliente-teste-123", "valorTotal": 99.99 }'
+docker build -t app-pedidos-image -f ./docker/Dockerfile .
 ```
 
-**Resultados Esperados:**
+Depois de criada a imagem, execute este comando no terminal para criar o container na rede correta de comunicação com o rabbitmq.
+```bash
+docker run -d --name app-pedidos --network projeto-pedidos-net -p 80:80 app-pedidos-image
+```
+---
 
-* No terminal do microserviço de pedidos (ou nos logs do container), você verá uma mensagem indicando que o pedido foi recebido e enviado para a fila do RabbitMQ.
-* No terminal do microserviço processador, você observará a mensagem sendo recebida, o processamento simulado (com um atraso de 5 segundos), e a conclusão do processo.
+## 📌 Próximos passos (evoluções sugeridas)
+
+- Criar um `docker-compose.yml` para orquestrar todos os containers de forma automatizada.
+- Adicionar testes de integração entre os microserviços.
+- Implementar logs centralizados com ELK Stack.
+- Configurar monitoramento (Prometheus + Grafana).
+
