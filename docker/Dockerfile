@@ -1,4 +1,4 @@
-FROM ubuntu/nginx:latest
+FROM openjdk:21-jdk-slim
 
 LABEL maintainer="Emmanoel Monteiro <emmanoeljr@gmail.com>"
 LABEL version="1.0"
@@ -6,11 +6,10 @@ LABEL description="Container de simulação de processamento de mensageria com R
 LABEL created_by="Emmanoel Monteiro"
 
 # Instalar dependências e Java 17
-RUN apt-get update && apt-get install -y \
-    systemd \
-    openjdk-21-jdk \
+RUN apt-get update \
+    && apt-get install -y nginx \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* # Limpa os caches para reduzir o tamanho da imagem
+    && rm -rf /var/lib/apt/lists/*
 
 # Remover a configuração padrão do Nginx que pode estar em sites-enabled, se presente.
 RUN rm -f /etc/nginx/sites-enabled/default
@@ -20,11 +19,11 @@ RUN mkdir -p /app
 
 # Copiar o arquivo de configuração Nginx personalizado para a pasta de configurações do Nginx.
 # O Nginx inclui automaticamente arquivos .conf dessa pasta.
-COPY docker/nginx_custom.conf /etc/nginx/conf.d/default.conf
+COPY nginx_custom.conf /etc/nginx/sites-enabled/default.conf
 
 # Copiar arquivos JAR para o container
-COPY microservice-pedidos/target/*.jar /app/pedidos.jar
-COPY microservice-processador-pedidos/target/*.jar /app/processador.jar
+COPY microservice-pedidos-1.0.0-SNAPSHOT.jar /app/pedidos.jar
+COPY microservice-processador-pedidos-1.0.0-SNAPSHOT.jar /app/processador.jar
 
 # Expor portas
 EXPOSE 80 8080 8081
@@ -39,4 +38,4 @@ nginx -g "daemon off;"\n' > /start.sh && chmod +x /start.sh
 CMD ["/start.sh"]
 
 # Depois de criada a imagem, execute este comando no terminal para criar o container na rede correta de comunicação com o rabbitmq.
-# docker run -d --name app-pedidos --network projeto-pedidos-net -p 80:80 app-pedidos-rabbitmq-java:1.0
+# docker run -d --name app-pedidos-teste --network projeto-pedidos-net -p 80:80 -p 8080:8080 -p 8081:8081 app-pedidos-teste:1.0
